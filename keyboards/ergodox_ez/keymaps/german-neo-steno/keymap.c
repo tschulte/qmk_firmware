@@ -64,6 +64,8 @@
 
 #define CIRC 0
 #define GRV 1
+#define LESS 2
+#define MORE 3
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
@@ -184,7 +186,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                   KC_TRNS, KC_TRNS, KC_TRNS,
     // right hand
        KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS,  DE_EXLM, DE_LESS, DE_MORE, DE_EQL,  DE_AMPR, KC_TRNS,
+       KC_TRNS,  DE_EXLM, M(LESS), M(MORE), DE_EQL,  DE_AMPR, KC_TRNS,
                  DE_QST,  DE_LPRN, DE_RPRN, DE_MINS, DE_COLN, DE_AT,
        KC_TRNS,  DE_PLUS, DE_PERC, DE_DQOT, DE_QUOT, DE_SCLN, KC_TRNS,
                           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -427,6 +429,8 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
       switch (id) {
         case CIRC: return TPE_ND(DE_CIRC);
         case GRV: return MOD_ND(KC_LSFT, DE_ACUT);
+        case LESS: return TPE(DE_LESS);
+        case MORE: return MOD(KC_LSFT, DE_LESS);
       }
     }
   }
