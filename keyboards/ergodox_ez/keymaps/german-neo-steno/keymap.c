@@ -102,7 +102,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // right hand
              DE_ACUT,     KC_6,   KC_7,   KC_8,   KC_9,   KC_0,   DE_GRV,
              KC_ENT,      DE_K,   DE_H,   DE_G,   DE_F,   DE_Q,   DE_SS,
-                          DE_S,   DE_N,   DE_R,   DE_T,   DE_D,   DE_Z,
+                          DE_S,   DE_N,   DE_R,   DE_T,   DE_D,   DE_Y,
              KC_DEL,      DE_B,   DE_M,   KC_COMM,KC_DOT, DE_J,   KC_BSPC,
                                   MO(FUNCTIONS), KC_NO, KC_ESC, KC_RGUI, KC_NO,
              MO(FKEYS), TG(NEO2_NEO2),
