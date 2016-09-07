@@ -43,6 +43,8 @@
 #include "virtser.h"
 #include "keymap_neo2.h"
 
+// Layers
+
 #define QWERTZ_NEO2 0 // Neo2 when PC is set to QWERTZ
 #define NEO2_NEO2 1 // Neo2 when PC is set to Neo2
 #define SYMBOLS 2 // SYMBOLS and function keys
@@ -50,6 +52,18 @@
 #define FUNCTIONS 4 // keyboard funktions
 #define FKEYS 5 // F1-F12
 #define TXBOLT 6 // TxBolt Steno Virtual Serial
+
+// Utilities for macros
+
+#define MOD(mod, kc) MACRO(I(15), DOWN(mod), TYPE(kc), UP(mod), END)
+#define TPE(kc) MACRO(I(15), TYPE(kc), END)
+#define MOD_ND(mod, kc) MACRO(I(15), DOWN(mod), TYPE(kc), UP(mod), TYPE(KC_SPC), END)
+#define TPE_ND(kc) MACRO(I(15), TYPE(kc), TYPE(KC_SPC), END)
+
+// Macro IDs
+
+#define CIRC 0
+#define GRV 1
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
@@ -161,9 +175,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [SYMBOLS] = KEYMAP(
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-       KC_TRNS, KC_TRNS, DE_UNDS, DE_LBRC, DE_RBRC, DE_CIRC, KC_TRNS,
+       KC_TRNS, KC_TRNS, DE_UNDS, DE_LBRC, DE_RBRC, M(CIRC), KC_TRNS,
        KC_TRNS, DE_BSLS, DE_SLSH, DE_LCBR, DE_RCBR, DE_ASTR,
-       KC_TRNS, DE_HASH, DE_DLR,  DE_PIPE, DE_TILD, DE_GRV,  KC_TRNS,
+       KC_TRNS, DE_HASH, DE_DLR,  DE_PIPE, DE_TILD, M(GRV),  KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                                            KC_TRNS, KC_TRNS,
                                                     KC_TRNS,
@@ -362,12 +376,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                     KC_NO,
                                   M(Al),   M(Ol),   KC_NO,
     // right hand
-       KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-       KC_TRNS,  M(NM),   M(NM),   M(NM),   M(NM),   M(NM),   M(NM),
-                 M(X),    M(Fr),   M(Pr),   M(Lr),   M(Tr),   M(Dr),
-       KC_NO,    M(X),    M(Rr),   M(Br),   M(Gr),   M(Sr),   M(Zr),
-                          KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-       KC_NO,   KC_TRNS,
+       KC_NO,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+       KC_NO,  M(NM),   M(NM),   M(NM),   M(NM),   M(NM),   M(NM),
+               M(X),    M(Fr),   M(Pr),   M(Lr),   M(Tr),   M(Dr),
+       KC_NO,  M(X),    M(Rr),   M(Br),   M(Gr),   M(Sr),   M(Zr),
+                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+       KC_NO,   KC_NO,
        KC_NO,
        KC_NO,   M(Er),   M(Ur)
     )
@@ -378,6 +392,7 @@ const uint16_t PROGMEM fn_actions[] = {
 
 uint8_t chord[4] = {0,0,0,0};
 uint8_t pressed_count = 0;
+uint16_t scan_no = 0;
 
 void send_chord(void)
 {
@@ -403,13 +418,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
   // MACRODOWN only works in this function
-
+  uint8_t layer = biton32(layer_state);
   if (record->event.pressed) {
-    uint8_t grp = (id & GRPMASK) >> 6;
-    chord[grp] |= id;
+    if (layer == TXBOLT) {
+      uint8_t grp = (id & GRPMASK) >> 6;
+      chord[grp] |= id;
+    } else {
+      switch (id) {
+        case CIRC: return TPE_ND(DE_CIRC);
+        case GRV: return MOD_ND(KC_LSFT, DE_ACUT);
+      }
+    }
   }
   else {
-    if (pressed_count == 0) {
+    if (pressed_count == 0 && layer == TXBOLT) {
       send_chord();
       chord[0] = chord[1] = chord[2] = chord[3] = 0;
     }
@@ -423,16 +445,23 @@ void matrix_init_user(void) {
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
-
     uint8_t layer = biton32(layer_state);
 
     ergodox_board_led_off();
     ergodox_right_led_1_off();
     ergodox_right_led_2_off();
     ergodox_right_led_3_off();
+    if (layer == NEO2_NEO2)
+        scan_no++;
+    else
+        scan_no = 0;
     switch (layer) {
-      // TODO: Make this relevant to the ErgoDox EZ.
         case NEO2_NEO2:
+            if ((scan_no % 1000) < 500) {
+                // blink ergodox_led
+                ergodox_board_led_on();
+            }
+            break;
         case TXBOLT:
             ergodox_board_led_on();
             break;
