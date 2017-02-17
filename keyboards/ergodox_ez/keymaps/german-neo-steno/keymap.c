@@ -123,7 +123,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
      * |        |   Y  |   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |   -  | Backsp |
      * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-     *   |      |      |      |      | RALT |                                       | RALT |      |       |      |      |
+     *   |      |      |      |      |  L3  |                                       |  L4  |      |       |      |      |
      *   `----------------------------------'                                       `----------------------------------'
      *                                        ,-------------.       ,-------------.
      *                                        |      |      |       |      |      |
@@ -139,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS,   NEO_X,     NEO_V,     NEO_L,     NEO_C,     NEO_W,   KC_TRNS,
         KC_TRNS,   NEO_U,     NEO_I,     NEO_A,     NEO_E,     NEO_O,
         KC_TRNS,   NEO_UE,    NEO_OE,    NEO_AE,    NEO_P,     NEO_Z,   KC_TRNS,
-        KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_RALT,
+        KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,  MO(NUMBERS),
                                          KC_TRNS,  KC_TRNS,
                                                    KC_TRNS,
                                 KC_CAPS, KC_TRNS,  KC_TRNS,
@@ -148,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             KC_TRNS,   NEO_K,     NEO_H,     NEO_G,     NEO_F,     NEO_Q,     NEO_SS,
                        NEO_S,     NEO_N,     NEO_R,     NEO_T,     NEO_D,     NEO_Y,
             KC_TRNS,   NEO_B,     NEO_M,     NEO_COMM,  NEO_DOT,   NEO_J,     KC_TRNS,
-                                  KC_RALT,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,
+                          MO(FUNCTIONS),   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,
         KC_TRNS, KC_TRNS,
         KC_TRNS,
         KC_TRNS,KC_TRNS, KC_TRNS
@@ -247,7 +247,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
      * |        |      |  Tab |      | Enter|      |      |           |      |      |      |      |      |      |        |
      * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
-     *   |      |      |      |      |      |                                       |  L0  |      |      |      |      |
+     *   |      |      |      |      |      |                                       |      |      |      |      |      |
      *   `----------------------------------'                                       `----------------------------------'
      *                                        ,-------------.       ,-------------.
      *                                        |      |      |       |      |      |
