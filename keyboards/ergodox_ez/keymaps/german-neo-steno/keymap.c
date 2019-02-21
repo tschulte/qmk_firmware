@@ -36,11 +36,10 @@
  * for this I need NKRO, which is not supported by Ben Blazak's firmware.
  */
 
-#include "ergodox.h"
+#include QMK_KEYBOARD_H
 #include "debug.h"
 #include "action_layer.h"
-#include "sendchar.h"
-#include "virtser.h"
+#include "keymap_steno.h"
 #include "keymap_neo2.h"
 
 // Layers
@@ -91,7 +90,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      | LCtrl|       | RCtrl|      |      |
      *                                 `--------------------'       `--------------------'
      */
-     [QWERTZ_NEO2] = KEYMAP(
+     [QWERTZ_NEO2] = LAYOUT_ergodox(
         // left hand
         KC_NO,          KC_1,         KC_2,   KC_3,   KC_4,   KC_5,   DE_CIRC,
         KC_NO,          DE_X,         DE_V,   DE_L,   DE_C,   DE_W,   KC_PGUP,
@@ -133,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-    [NEO2_NEO2] = KEYMAP(
+    [NEO2_NEO2] = LAYOUT_ergodox(
         // left hand
         KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS,   KC_TRNS, DE_CIRC,
         KC_TRNS,   NEO_X,     NEO_V,     NEO_L,     NEO_C,     NEO_W,   KC_TRNS,
@@ -175,7 +174,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-    [SYMBOLS] = KEYMAP(
+    [SYMBOLS] = LAYOUT_ergodox(
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, DE_UNDS, DE_LBRC, DE_RBRC, M(CIRC), KC_TRNS,
        KC_TRNS, DE_BSLS, DE_SLSH, DE_LCBR, DE_RCBR, DE_ASTR,
@@ -216,7 +215,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-    [NUMBERS] = KEYMAP(
+    [NUMBERS] = LAYOUT_ergodox(
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -257,7 +256,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-    [FUNCTIONS] = KEYMAP(
+    [FUNCTIONS] = LAYOUT_ergodox(
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_PGUP, KC_BSPC, KC_UP,   KC_DELT, KC_PGDN, KC_TRNS,
         KC_TRNS, KC_HOME, KC_LEFT, KC_DOWN, KC_RGHT, KC_END,
@@ -298,7 +297,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 |      |      |      |       |      |      |      |
      *                                 `--------------------'       `--------------------'
      */
-    [FKEYS] = KEYMAP(
+    [FKEYS] = LAYOUT_ergodox(
         RESET,   KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -317,35 +316,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS
    ),
-// TxBolt Codes
-#define Sl 0b00000001
-#define Tl 0b00000010
-#define Kl 0b00000100
-#define Pl 0b00001000
-#define Wl 0b00010000
-#define Hl 0b00100000
-#define Rl 0b01000001
-#define Al 0b01000010
-#define Ol 0b01000100
-#define X  0b01001000
-#define Er 0b01010000
-#define Ur 0b01100000
-#define Fr 0b10000001
-#define Rr 0b10000010
-#define Pr 0b10000100
-#define Br 0b10001000
-#define Lr 0b10010000
-#define Gr 0b10100000
-#define Tr 0b11000001
-#define Sr 0b11000010
-#define Dr 0b11000100
-#define Zr 0b11001000
-#define NM 0b11010000
-#define GRPMASK 0b11000000
-#define GRP0 0b00000000
-#define GRP1 0b01000000
-#define GRP2 0b10000000
-#define GRP3 0b11000000
+
     /* Keymap Layer 6: TxBolt (Serial)
      *
      * ,--------------------------------------------------.           ,--------------------------------------------------.
@@ -368,76 +339,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      *                                 `--------------------'       `--------------------'
      */
     // TxBolt over Serial
-    [TXBOLT] = KEYMAP(
+    [TXBOLT] = LAYOUT_ergodox(
        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-       KC_NO,   M(NM),   M(NM),   M(NM),   M(NM),   M(NM),  KC_NO,
-       KC_NO,   M(Sl),   M(Tl),   M(Pl),   M(Hl),   M(X),
-       KC_NO,   M(Sl),   M(Kl),   M(Wl),   M(Rl),   M(X),   KC_NO,
+       KC_NO,   STN_N1,  STN_N2,  STN_N3,  STN_N4,  STN_N5,  KC_NO,
+       KC_NO,   STN_S1,  STN_TL,  STN_PL,  STN_HL,  STN_ST1,
+       KC_NO,   STN_S2,  STN_KL,  STN_WL,  STN_RL,  STN_ST2, KC_NO,
        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
                                            KC_TRNS, KC_NO,
                                                     KC_NO,
-                                  M(Al),   M(Ol),   KC_NO,
+                                  STN_A,   STN_O,   KC_NO,
     // right hand
-       KC_NO,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
-       KC_NO,  M(NM),   M(NM),   M(NM),   M(NM),   M(NM),   M(NM),
-               M(X),    M(Fr),   M(Pr),   M(Lr),   M(Tr),   M(Dr),
-       KC_NO,  M(X),    M(Rr),   M(Br),   M(Gr),   M(Sr),   M(Zr),
-                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+       KC_NO,    KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+       KC_NO,    STN_N6,  STN_N7,  STN_N8,  STN_N9,  STN_NA,  STN_NB,
+                 STN_ST3, STN_FR,  STN_PR,  STN_LR,  STN_TR,  STN_DR,
+       KC_NO,    STN_ST4, STN_RR,  STN_BR,  STN_GR,  STN_SR,  STN_ZR,
+                          KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
        KC_NO,   KC_NO,
        KC_NO,
-       KC_NO,   M(Er),   M(Ur)
+       KC_NO,   STN_E,   STN_U
     )
 };
 
-const uint16_t PROGMEM fn_actions[] = {
-};
-
-uint8_t chord[4] = {0,0,0,0};
-uint8_t pressed_count = 0;
 uint16_t scan_no = 0;
-
-void send_chord(void)
-{
-  for(uint8_t i = 0; i < 4; i++)
-  {
-    if(chord[i])
-      virtser_send(chord[i]);
-  }
-  virtser_send(0);
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record)
-{
-  // We need to track keypresses in all modes, in case the user
-  // changes mode whilst pressing other keys.
-  if (record->event.pressed)
-    pressed_count++;
-  else
-    pressed_count--;
-  return true;
-}
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
   // MACRODOWN only works in this function
-  uint8_t layer = biton32(layer_state);
   if (record->event.pressed) {
-    if (layer == TXBOLT) {
-      uint8_t grp = (id & GRPMASK) >> 6;
-      chord[grp] |= id;
-    } else {
-      switch (id) {
-        case CIRC: return TPE_ND(DE_CIRC);
-        case GRV: return MOD_ND(KC_LSFT, DE_ACUT);
-        case LESS: return TPE(DE_LESS);
-        case MORE: return MOD(KC_LSFT, DE_LESS);
-      }
-    }
-  }
-  else {
-    if (pressed_count == 0 && layer == TXBOLT) {
-      send_chord();
-      chord[0] = chord[1] = chord[2] = chord[3] = 0;
+    switch (id) {
+      case CIRC: return TPE_ND(DE_CIRC);
+      case GRV: return MOD_ND(KC_LSFT, DE_ACUT);
+      case LESS: return TPE(DE_LESS);
+      case MORE: return MOD(KC_LSFT, DE_LESS);
     }
   }
   return MACRO_NONE;
@@ -445,6 +378,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
+    steno_set_mode(STENO_MODE_BOLT); // or STENO_MODE_GEMINI
 };
 
 // Runs constantly in the background, in a loop.
