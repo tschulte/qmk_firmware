@@ -382,6 +382,8 @@ void matrix_init_user(void) {
   steno_set_mode(STENO_MODE_BOLT);
   // or
   // steno_set_mode(STENO_MODE_GEMINI);
+
+  layer_on(NEO2_NEO2);
 };
 
 // Runs constantly in the background, in a loop.
@@ -392,13 +394,13 @@ void matrix_scan_user(void) {
   ergodox_right_led_1_off();
   ergodox_right_led_2_off();
   ergodox_right_led_3_off();
-  if (layer == NEO2_NEO2) {
+  if (layer == QWERTZ_NEO2) {
     scan_no++;
   } else {
     scan_no = 0;
   }
   switch (layer) {
-    case NEO2_NEO2:
+    case QWERTZ_NEO2:
       if ((scan_no % 1000) < 500) {
         // blink ergodox_led
         ergodox_board_led_on();
